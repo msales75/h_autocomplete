@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Mark's autocomplete demo 1</title>
+<script src="js/lib/jquery-1.11.3.js"></script>
+<script src="js/lib/jquery.textcomplete.js"></script>
+<script>
+function startsWith(term, str) {
+  return (str.toUpperCase().indexOf(term.toUpperCase())===0)
+}
+
+$(function() {
+  $.getJSON("data.json", function (data) {
+    $('#textarea1').textcomplete([{
+        match: /\b(\w{3,})$/,
+	template: function (record) {
+	  return ['<img src="', record.avatar_url,
+                  '"></img>', record.name].join('');
+	},
+        search: function (term, callback) {
+            callback($.map(data, function (record) {
+                if (startsWith(term, record.username)) return record;
+                var names = record.name.split(' ');
+		for (var i=0; i<names.length; ++i) {
+		  if (startsWith(term, names[i])) return record;
+		}
+		return null;
+            }));
+        },
+        replace: function (record) {
+            return record.name;
+        }
+    }]);
+  });
+});
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/lib/jquery.textcomplete.css" />
+<link rel="stylesheet" type="text/css" href="css/app.css" />
+
+</head>
+<body>
+
+<h1>Contextual autocomplete v1: quick and dirty solution with jQuery</h1>
+
+<textarea id="textarea1" class="textblock"></textarea>
+
+</body>
+</html>
+

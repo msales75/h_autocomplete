@@ -1,0 +1,22 @@
+{
+  "name": "mark_app2",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Example App.",
+  "dependencies": {
+    "jquery": "1.11.1",
+    "angular": "1.4.7",
+    "http-server": "^0.6.1"
+  },
+  "devDependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/msales75/contextcomplete.git"
+  },
+  "license": "MIT License",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "http-server -a 0.0.0.0 -p 8000"
+  }
+}
