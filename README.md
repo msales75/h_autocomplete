@@ -15,18 +15,22 @@ as a whole.  This is not ideal, but it gets some testing done without having
 to refactor the JQuery plugin into testable objects.
 
 Installation:
+
 git clone https://github.com/msales75/h_autocomplete.git
+
 cd h_autocomplete
 
-# install all dependencies for preexisting webserver
+### install all dependencies for preexisting webserver
 npm install
 
-# Run karma tests to webserver at http://localhost:9876
+### Run karma tests to webserver at http://localhost:9876
 npm test
 
-# Load app to webserver at http://localhost:8000
+### Load app to webserver at http://localhost:8000
 npm start
 
 
 For a preinstalled demo, see:
+
 http://stormweaver.com/h_autocomplete/
+
