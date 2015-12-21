@@ -9,10 +9,18 @@ This still uses JQuery but it compartmentalizes it inside an angular
 directive so that the damage to testing/integration with other angular modules
 is not too bad.
 
-Because the components inside the autocomplete function are still in JQuery,
-it can't be easily unit-tested, so I instead do DOM-testing for the directive
-as a whole.  This is not ideal, but it gets some testing done without having
-to refactor the JQuery plugin into testable objects.
+However, because the components inside the autocomplete function are still in 
+JQuery, those can't be easily unit-tested. So I instead do DOM-testing for the 
+directive as a whole.  This is not ideal, but it gets some testing done without 
+having to refactor the JQuery plugin into testable objects.  We can discuss
+the pros and cons of this approach.
+
+The UI approach uses two types of autcomplete, one when the user types '@',
+and one when they don't.  The motivation is to minimize the intrusiveness of
+popups by encouraging the user to type '@' to initiate autocomplete, but
+also to help the learning curve by letting the user see autocomplete without 
+having to do this.  If they don't type the '@' they have to type the entire 
+first-name or username before autocomplete appears.  
 
 Installation:
 
