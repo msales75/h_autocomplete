@@ -153,6 +153,9 @@ if (typeof jQuery === 'undefined') {
       throw new Error('textcomplete must be called on a Textarea or a ContentEditable.');
     }
 
+    // MS change - do not do lazy instantiation
+    this.initialize();
+    /*
     if (element === document.activeElement) {
       // element has already been focused. Initialize view objects immediately.
       this.initialize()
@@ -161,6 +164,7 @@ if (typeof jQuery === 'undefined') {
       var self = this;
       this.$el.one('focus.' + this.id, function () { self.initialize(); });
     }
+    */
   }
 
   Completer._getDefaults = function () {

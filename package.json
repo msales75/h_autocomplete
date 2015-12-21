@@ -1,22 +1,29 @@
 {
-  "name": "mark_app2",
+  "name": "Autocomplete_Example_App",
   "private": true,
   "version": "0.0.0",
-  "description": "Example App.",
+  "description": "",
   "dependencies": {
     "jquery": "1.11.1",
     "angular": "1.4.7",
     "http-server": "^0.6.1"
   },
   "devDependencies": {
+    "karma": "~0.13",
+    "jasmine-core": "~2.4",
+    "karma-jasmine": "~0.3",
+    "karma-read-json": "~1.1",
+    "karma-jasmine-async": "0.0.1",
+    "angular-mocks": "1.4.7"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/msales75/contextcomplete.git"
+    "url": "https://github.com/msales75/h_autocomplete.git"
   },
   "license": "MIT License",
   "scripts": {
     "prestart": "npm install",
-    "start": "http-server -a 0.0.0.0 -p 8000"
+    "start": "node_modules/http-server/bin/http-server -a 0.0.0.0 -p 8000",
+    "test": "node_modules/karma/bin/karma start test/karma.config.js"
   }
 }
