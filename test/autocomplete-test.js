@@ -1,5 +1,9 @@
 describe('Autocomplete Directive', function () {
 
+// This is NOT a complete set of tests!
+//  but there's a handful to show that the overall testing-framework works,
+//  and the autocomplete opens at appropriate times
+
 // Helper functions for dealing with DOM manipulation
   var setCursor = function(e, position) {
     if (e.setSelectionRange) { e.focus(); e.setSelectionRange(position, position); } /* WebKit */

@@ -1,51 +1,112 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<title>Mark's autocomplete demo 1</title>
-<script src="node_modules/jquery/dist/jquery.js"></script>
-<script src="js/lib/jquery.textcomplete.js"></script>
-<script>
-function startsWith(term, str) {
-  return (str.toUpperCase().indexOf(term.toUpperCase())===0)
-}
+  <title>Mark's autocomplete demo 1</title>
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="app/jquery.textcomplete.js"></script>
+  <script>
+    function startsWith(term, str) {
+      return (str.toUpperCase().indexOf(term.toUpperCase()) === 0)
+    }
+    $(function() {
+      $.getJSON("data.json", function(users) {
+        $('#textarea1').textcomplete([{
+          match: /((?:[^\w@]|^)(?:\w+ )?\w{3,}|@(?:\w+ )?\w*)$/,
+          index: 1,
+          template: function(record) {
+            // each popup-line has thumbnail followed by the name & username
+            return ['<img src="', record.avatar_url, '"></img>',
+              record.name, '(', record.username, ')'
+            ].join('');
+          },
+          search: function(term, callback) {
+            callback($.map(users, function(record) {
+              var matchterm, alwaysshow, returnrecord, firstnameLength;
 
-$(function() {
-  $.getJSON("data.json", function (data) {
-    $('#textarea1').textcomplete([{
-        match: /\b(\w{3,})$/,
-	template: function (record) {
-	  return ['<img src="', record.avatar_url,
-                  '"></img>', record.name].join('');
-	},
-        search: function (term, callback) {
-            callback($.map(data, function (record) {
-                if (startsWith(term, record.username)) return record;
-                var names = record.name.split(' ');
-		for (var i=0; i<names.length; ++i) {
-		  if (startsWith(term, names[i])) return record;
-		}
-		return null;
+              // return the user-record that matches, annotated with some
+              //   contextual information about the match.
+              returnrecord = $.extend({}, record, {
+                term: term,
+                prefix: ''
+              });
+
+              matchterm = term;
+              if (term.substr(0, 1).match(/[^@\w]/)) {
+                returnrecord.prefix = term.substr(0, 1);
+                matchterm = matchterm.substr(1);
+              }
+              if (matchterm.substr(0, 1) === '@') {
+                alwaysshow = true;
+                matchterm = matchterm.substr(1);
+                if (!matchterm.length) {
+                  return returnrecord;
+                }
+              } else {
+                alwaysshow = false;
+              }
+              if (alwaysshow) {
+                if (startsWith(matchterm, record.username)) return returnrecord;
+                if (startsWith(matchterm, record.name)) return returnrecord;
+              } else {
+                // username or firstname must match exactly if they aren't using '@'
+                if (record.username.toUpperCase() === matchterm.toUpperCase()) {
+                  return returnrecord;
+                }
+                firstnameLength = (record.name.split(' '))[0].length;
+                if (matchterm.length >= firstnameLength) {
+                  if (startsWith(matchterm, record.name)) {
+                    return returnrecord;
+                  }
+                }
+              }
+              // try matching second word only, if there are two
+              var termwords = matchterm.split(' ');
+              if (termwords.length > 1) {
+                if (termwords[1].toUpperCase() === record.username.toUpperCase()) {
+                  if (alwaysshow) {
+                    returnrecord.prefix += '@';
+                  }
+                  returnrecord.prefix += termwords[0] + ' ';
+                  return returnrecord;
+                }
+                firstnameLength = (record.name.split(' '))[0].length;
+                if (termwords[1].length >= firstnameLength) {
+                  if (startsWith(termwords[1], record.name)) {
+                    if (alwaysshow) {
+                      returnrecord.prefix += '@';
+                    }
+                    returnrecord.prefix += termwords[0] + ' ';
+                    return returnrecord;
+                  }
+                }
+              }
+              return null;
             }));
-        },
-        replace: function (record) {
-            return record.name;
-        }
-    }]);
-  });
-});
-</script>
+          },
+          replace: function(record) {
+            return record.prefix + '@' +
+              record.name.replace(' ', '_') + ' ';
+          }
+        }], {
+          appendTo: $('#textarea1').parent() // put new list in parent-div
+        });
+      });
+    });
+  </script>
 
-<link rel="stylesheet" type="text/css" href="css/lib/jquery.textcomplete.css" />
-<link rel="stylesheet" type="text/css" href="css/app.css" />
+  <link rel="stylesheet" type="text/css" href="css/jquery.textcomplete.css" />
+  <link rel="stylesheet" type="text/css" href="css/app.css" />
 
 </head>
+
 <body>
 
-<h1>Contextual autocomplete v1: quick and dirty solution with jQuery</h1>
+  <h1>Contextual autocomplete v1: quick and dirty solution with jQuery</h1>
 
-<textarea id="textarea1" class="textblock"></textarea>
+  <textarea id="textarea1" class="textblock"></textarea>
 
 </body>
-</html>
 
+</html>
